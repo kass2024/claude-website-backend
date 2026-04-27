@@ -17,7 +17,8 @@
       <li><strong>Email:</strong> {{ $c->email }}</li>
       @if($c->phone)<li><strong>Phone:</strong> {{ $c->phone }}</li>@endif
       @if($c->country)<li><strong>Country:</strong> {{ $c->country }}</li>@endif
-      @if($c->service_category)<li><strong>Service category:</strong> {{ $c->service_category }}</li>@endif
+      @if($c->service_category)<li><strong>Department:</strong> {{ $c->service_category }}</li>@endif
+      @if($c->service_name)<li><strong>Service:</strong> {{ $c->service_name }}</li>@endif
       @if($c->consultation_type)<li><strong>Consultation type:</strong> {{ $c->consultation_type }}</li>@endif
       @if($c->preferred_date)<li><strong>Preferred date:</strong> {{ $c->preferred_date->toDateString() }}</li>@endif
     </ul>

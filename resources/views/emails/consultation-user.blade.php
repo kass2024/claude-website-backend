@@ -14,6 +14,8 @@
 
     <div style="background:#f3f4f6; padding:12px; border-radius:10px;">
       <div><strong>Reference:</strong> #{{ $c->id }}</div>
+      @if($c->service_category)<div><strong>Department:</strong> {{ $c->service_category }}</div>@endif
+      @if($c->service_name)<div><strong>Service:</strong> {{ $c->service_name }}</div>@endif
       @if($c->consultation_type)<div><strong>Consultation type:</strong> {{ $c->consultation_type }}</div>@endif
       @if($c->preferred_date)<div><strong>Preferred date:</strong> {{ $c->preferred_date->toDateString() }}</div>@endif
     </div>

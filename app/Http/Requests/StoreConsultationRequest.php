@@ -24,7 +24,8 @@ class StoreConsultationRequest extends FormRequest
             'country' => ['nullable', 'string', 'max:100'],
             'preferred_date' => ['nullable', 'date'],
             'consultation_type' => ['nullable', 'string', 'in:Virtual Meeting,Phone Call,In-Person Meeting'],
-            'service_category' => ['nullable', 'string', 'max:100'],
+            'service_category' => ['required', 'string', 'regex:/^\\d{1,2}$/'],
+            'service_name' => ['nullable', 'string', 'max:255'],
             'project_summary' => ['required', 'string', 'max:10000'],
         ];
     }

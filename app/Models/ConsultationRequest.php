@@ -21,6 +21,7 @@ class ConsultationRequest extends Model
         'phone',
         'country',
         'service_category',
+        'service_name',
         'consultation_type',
         'preferred_date',
         'project_summary',
