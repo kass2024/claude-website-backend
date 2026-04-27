@@ -3,9 +3,11 @@
 namespace App\Mail;
 
 use App\Models\QuoteRequest;
+use App\Services\QuotePdfService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -33,6 +35,22 @@ class QuoteApprovedUser extends Mailable implements ShouldQueue
                 'q' => $this->quote,
             ],
         );
+    }
+
+    /**
+     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     */
+    public function attachments(): array
+    {
+        $service = new QuotePdfService();
+        $id = (int) $this->quote->id;
+
+        return [
+            Attachment::fromData(
+                fn () => $service->render($this->quote),
+                "quotation-{$id}.pdf"
+            )->withMime('application/pdf'),
+        ];
     }
 }
 

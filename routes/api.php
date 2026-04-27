@@ -18,6 +18,7 @@ use App\Http\Controllers\Public\ConsultationRequestController;
 use App\Http\Controllers\Public\ContactMessageController;
 use App\Http\Controllers\Public\QuoteRequestController;
 use App\Http\Controllers\Public\FaqController;
+use App\Http\Controllers\Public\FxRateController;
 use App\Http\Controllers\Public\FileController;
 use App\Http\Controllers\Public\PartnerController;
 use App\Http\Controllers\Public\ProjectController;
@@ -45,6 +46,7 @@ Route::middleware('no-cache')->group(function () {
     Route::get('/settings', [SettingController::class, 'index']);
     Route::get('/board-members', [BoardMemberController::class, 'index']);
     Route::get('/partners', [PartnerController::class, 'index']);
+    Route::get('/fx/latest', [FxRateController::class, 'latest']);
     Route::get('/files/{path}', [FileController::class, 'show'])->where('path', '.*');
 });
 
