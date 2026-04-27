@@ -11,6 +11,8 @@ return [
         'categories',
         'contact',
         'consultation',
+        'quote',
+        'quote/*',
         'testimonials',
         'faqs',
         'settings',

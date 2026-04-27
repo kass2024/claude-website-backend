@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Faq;
+use App\Models\BoardMember;
+use App\Models\Partner;
 use App\Models\Post;
 use App\Models\Project;
 use App\Models\Service;
@@ -12,6 +14,7 @@ use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -23,11 +26,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin = User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => 'password',
-        ]);
+        $admin = User::query()->updateOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'Admin',
+                // IMPORTANT: always store bcrypt-hashed passwords
+                'password' => Hash::make('admin12345'),
+            ]
+        );
 
         $blogCategories = collect([
             'Architecture',
@@ -42,48 +48,107 @@ class DatabaseSeeder extends Seeder
             ['name' => $name, 'sort_order' => $i]
         ));
 
+        // Services mirror the static frontend portfolio (Departments 1–7).
         $services = [
             [
                 'title' => 'Architecture & Construction Consulting',
                 'slug' => 'architecture-construction',
-                'short_description' => 'Architectural design, 2D/3D modeling, BIM services, smart buildings, and sustainable construction consulting.',
-                'full_description' => 'We provide innovative architectural and construction consulting services that combine creativity, technical precision, and sustainability. Our goal is to help clients design, plan, and implement buildings and environments that are functional, efficient, and future-ready.',
+                'title_fr' => 'Conseil en architecture & construction',
+                'short_description' => 'Planning & design, BIM & digital twin, construction consulting, sustainable & smart buildings, and end-to-end residential renovation (Canada & Rwanda).',
+                'short_description_fr' => 'Conception, BIM & jumeau numérique, conseil en construction, bâtiments durables et intelligents, et rénovation résidentielle clé en main.',
+                'full_description' => 'Planning, design, construction consulting, sustainable and smart solutions, and full residential renovation services—for new builds and transformations across residential and commercial markets.',
+                'full_description_fr' => 'Conseil architectural et construction de bout en bout.',
+                'sections' => [
+                    ['title' => 'Planning & Design', 'body' => "Architectural concept design (residential, commercial, mixed-use)\nSpace planning & layout optimization\n2D drafting (AutoCAD)\n3D modeling & visualization (Revit, SketchUp, Lumion, Archicad)\nBIM modeling & coordination\nDigital twin development\nPermit-ready documentation (Rwanda)"],
+                    ['title' => 'Construction & Project Consulting', 'body' => "Construction planning & scheduling\nCost estimation & quantity takeoff\nTender documentation & contractor selection\nSite supervision & quality control\nRisk management & compliance"],
+                    ['title' => 'Sustainable & Smart Building Solutions', 'body' => "Energy-efficient design\nGreen building consulting\nSmart home & IoT integration\nRenewable energy systems (solar, water reuse)\nClimate-responsive architecture"],
+                ],
                 'sort_order' => 1,
             ],
             [
                 'title' => 'Artificial Intelligence & Innovation',
                 'slug' => 'artificial-intelligence-innovation',
-                'short_description' => 'AI integration, automation, digital transformation, and innovation advisory for modern organizations.',
-                'full_description' => 'We help organizations leverage applied artificial intelligence to improve operations, automate processes, generate insights, and unlock new opportunities for growth and innovation.',
+                'title_fr' => 'Intelligence artificielle & innovation',
+                'short_description' => 'AI strategy & transformation, chatbots & ML, predictive analytics, MVP/SaaS product delivery, and innovation labs.',
+                'short_description_fr' => 'Stratégie IA, chatbots & ML, analytics prédictive, produits MVP/SaaS et labs d’innovation.',
+                'full_description' => 'Strategy, integration, and product innovation—from AI roadmaps and automation to chatbots, ML, and venture-style product delivery.',
+                'full_description_fr' => 'Stratégie IA appliquée, automatisation et programmes d’innovation.',
+                'sections' => [
+                    ['title' => 'AI Strategy & Transformation', 'body' => "AI strategy development\nDigital transformation roadmaps\nProcess automation\nInnovation consulting"],
+                    ['title' => 'AI Solutions & Integration', 'body' => "AI chatbot development\nMachine learning models\nPredictive analytics systems\nAI-driven decision support tools"],
+                    ['title' => 'Innovation & Product Development', 'body' => "MVP development\nSaaS platform creation\nAI product design\nInnovation labs & startup incubation"],
+                ],
                 'sort_order' => 2,
             ],
             [
                 'title' => 'Digital Services & Technology Solutions',
                 'slug' => 'digital-services',
-                'short_description' => 'Web platforms, business systems, digital strategy, and technology solutions for growth and efficiency.',
-                'full_description' => 'We create digital products and systems that support business efficiency, service delivery, and long-term growth. From websites and platforms to digital transformation strategies, we help organizations thrive in the digital era.',
+                'title_fr' => 'Services numériques & solutions technologiques',
+                'short_description' => 'Web & e‑commerce, mobile apps, business systems, cloud (AWS/Azure), cybersecurity, and system integration.',
+                'short_description_fr' => 'Web & e‑commerce, applications mobiles, systèmes métiers, cloud, cybersécurité et intégration.',
+                'full_description' => 'Web and mobile delivery, business systems, cloud, security, and integrations—built for reliability and scale.',
+                'full_description_fr' => 'Livraison produit et plateforme couvrant le web, les intégrations et les systèmes d’entreprise.',
+                'sections' => [
+                    ['title' => 'Web & Platform Development', 'body' => "Website design & development\nE-commerce platforms\nWeb applications\nUX/UI design"],
+                    ['title' => 'Mobile & Software Solutions', 'body' => "Mobile app development (Android / iOS)\nBusiness management systems\nFintech applications\nCustom software solutions"],
+                    ['title' => 'Infrastructure & Security', 'body' => "Cloud computing (AWS, Azure)\nData storage & backup\nCybersecurity solutions\nSystem integration"],
+                ],
                 'sort_order' => 3,
             ],
             [
                 'title' => 'Professional Training & E-Learning',
                 'slug' => 'training-elearning',
-                'short_description' => 'Professional training, distance education, certification programs, and online learning platform management.',
-                'full_description' => 'We design and deliver training programs that build capacity, improve professional skills, and make learning more accessible through digital platforms and distance education.',
+                'title_fr' => 'Formation professionnelle & e-learning',
+                'short_description' => 'Corporate workshops, engineering-software training, LMS & online programmes, and certifications (AI, architecture, business).',
+                'short_description_fr' => 'Ateliers entreprise, formation logiciels d’ingénierie, LMS & programmes en ligne, certifications.',
+                'full_description' => 'Corporate programmes, digital skills, LMS setup, and certification tracks aligned to architecture, AI, business, and engineering software.',
+                'full_description_fr' => 'Renforcement des capacités via cohortes, parcours de certification et écosystèmes d’apprentissage.',
+                'sections' => [
+                    ['title' => 'Training Programs', 'body' => "Professional training programs (AI, architecture, business)\nCorporate training workshops\nDigital skills development\nTraining on engineering design software tailored to client needs"],
+                    ['title' => 'E-Learning & Distance Education', 'body' => "Online course creation\nVideo-based training programs\nLMS setup\nOnline education platforms"],
+                    ['title' => 'Certification Programs', 'body' => "AI certification programs\nArchitecture & construction certification\nBusiness & entrepreneurship certification\nDigital badges & credentials"],
+                ],
                 'sort_order' => 4,
             ],
             [
                 'title' => 'Real Estate Consulting & Investment Advisory',
                 'slug' => 'real-estate-consulting',
-                'short_description' => 'Feasibility studies, property consulting, valuation support, and investment guidance.',
-                'full_description' => 'We support clients in making informed real estate decisions through market insight, project evaluation, and strategic development guidance.',
+                'title_fr' => 'Conseil immobilier & investissement',
+                'short_description' => 'Feasibility & market analysis, financial modeling, property advisory, investment strategy—including cross-border consulting.',
+                'short_description_fr' => 'Faisabilité & marché, modélisation financière, conseil immobilier, stratégie d’investissement transfrontalière.',
+                'full_description' => 'Feasibility, market and financial analysis, property advisory, and investment strategy—including cross-border perspectives.',
+                'full_description_fr' => 'Cadrage digne d’un investisseur — de la faisabilité à la valorisation et au positionnement stratégique.',
+                'sections' => [
+                    ['title' => 'Feasibility & Analysis', 'body' => "Feasibility studies\nMarket analysis & demand forecasting\nFinancial modeling (ROI, IRR, cash flow)"],
+                    ['title' => 'Property Consulting', 'body' => "Property evaluation & advisory\nLand acquisition consulting\nBest-use analysis\nDue diligence"],
+                    ['title' => 'Investment Advisory', 'body' => "Investment strategy development\nPortfolio planning\nReal estate development advisory\nCross-border investment consulting"],
+                ],
                 'sort_order' => 5,
             ],
             [
                 'title' => 'Strategic Marketing & Business Development',
                 'slug' => 'strategic-marketing-business-development',
-                'short_description' => 'Brand positioning, expansion strategies, commercial planning, and business development support.',
-                'full_description' => 'We help brands and organizations strengthen their market position, expand strategically, and build sustainable growth pathways through tailored marketing and business development solutions.',
+                'title_fr' => 'Marketing stratégique & développement commercial',
+                'short_description' => 'Market research & brand positioning, digital strategy, partnerships, expansion (Canada ↔ Africa), CRM & revenue growth.',
+                'short_description_fr' => 'Étude de marché & marque, stratégie numérique, partenariats, expansion Canada–Afrique, CRM & croissance.',
+                'full_description' => 'Research-led positioning, digital strategy, partnerships, expansion planning, and revenue optimization.',
+                'full_description_fr' => 'Conseil go-to-market et croissance — marque, planification commerciale et développement structuré.',
+                'sections' => [
+                    ['title' => 'Marketing Strategy', 'body' => "Market research & analysis\nBrand positioning & identity\nDigital marketing strategy\nLead generation systems"],
+                    ['title' => 'Business Development', 'body' => "Partnership strategy\nExpansion planning (Canada ↔ Africa)\nB2B networking\nCommercial strategy"],
+                    ['title' => 'Sales & Growth Optimization', 'body' => "Sales funnel design\nCRM implementation\nCustomer acquisition strategy\nRevenue optimization"],
+                ],
                 'sort_order' => 6,
+            ],
+            [
+                'title' => 'Water Management & Urban Sanitation',
+                'slug' => 'water-management-department',
+                'title_fr' => 'Gestion de l’eau & assainissement urbain',
+                'short_description' => 'Integrated water supply, sanitation, environmental safeguards, smart systems, training, and asset management—Africa & Canada.',
+                'short_description_fr' => 'Offre intégrée en alimentation en eau, assainissement, sauvegardes environnementales, systèmes intelligents et gestion d’actifs.',
+                'full_description' => 'A dedicated department for integrated water management and urban sanitation. The full portfolio is presented on the department detail page.',
+                'full_description_fr' => 'Département dédié à la gestion de l’eau et à l’assainissement urbain.',
+                'sort_order' => 7,
             ],
         ];
 
@@ -197,6 +262,37 @@ class DatabaseSeeder extends Seeder
                 ['answer' => $faq['a'], 'sort_order' => $i + 1, 'is_published' => true]
             );
         }
+
+        // Seed at least one board member and partner so the admin lists are non-empty.
+        BoardMember::query()->updateOrCreate(
+            ['email' => 'info@example.com'],
+            [
+                'name' => 'Board Member (Sample)',
+                'name_fr' => 'Membre du conseil (Exemple)',
+                'role' => 'Advisor',
+                'role_fr' => 'Conseiller',
+                'bio' => 'Sample profile seeded to validate the admin workflow. Replace with your real board information.',
+                'bio_fr' => 'Profil exemple pour valider le workflow admin. Remplacez par vos informations réelles.',
+                'phone' => null,
+                'linkedin_url' => null,
+                'image_path' => null,
+                'sort_order' => 1,
+                'is_published' => true,
+            ]
+        );
+
+        Partner::query()->updateOrCreate(
+            ['name' => 'Partner (Sample)'],
+            [
+                'name_fr' => 'Partenaire (Exemple)',
+                'tagline' => 'Sample partner seeded for admin validation.',
+                'tagline_fr' => 'Partenaire exemple pour valider l’admin.',
+                'website_url' => null,
+                'logo_path' => null,
+                'sort_order' => 1,
+                'is_published' => true,
+            ]
+        );
 
         Setting::query()->updateOrCreate(
             ['key' => 'company.profile', 'group' => 'company'],
