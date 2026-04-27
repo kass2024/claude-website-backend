@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\ConsultationRequestAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
+use App\Http\Controllers\Admin\QuoteRequestAdminController;
 use App\Http\Controllers\Admin\BoardMemberAdminController;
 use App\Http\Controllers\Admin\PartnerAdminController;
 use App\Http\Controllers\Admin\PostAdminController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Public\BlogPostController;
 use App\Http\Controllers\Public\CategoryController;
 use App\Http\Controllers\Public\ConsultationRequestController;
 use App\Http\Controllers\Public\ContactMessageController;
+use App\Http\Controllers\Public\QuoteRequestController;
 use App\Http\Controllers\Public\FaqController;
 use App\Http\Controllers\Public\FileController;
 use App\Http\Controllers\Public\PartnerController;
@@ -37,6 +39,7 @@ Route::get('/posts/{post:slug}', [BlogPostController::class, 'show']);
 
 Route::post('/contact', [ContactMessageController::class, 'store']);
 Route::post('/consultation', [ConsultationRequestController::class, 'store']);
+Route::post('/quote', [QuoteRequestController::class, 'store']);
 // POST /career-application will be added with file upload when career module is implemented.
 
 Route::get('/testimonials', [TestimonialController::class, 'index']);
@@ -73,6 +76,11 @@ Route::prefix('/admin')->middleware('no-cache')->group(function () {
 
         Route::get('/consultation-requests', [ConsultationRequestAdminController::class, 'index']);
         Route::get('/consultation-requests/{consultationRequest}', [ConsultationRequestAdminController::class, 'show']);
+
+        Route::get('/quote-requests', [QuoteRequestAdminController::class, 'index']);
+        Route::get('/quote-requests/{quoteRequest}', [QuoteRequestAdminController::class, 'show']);
+        Route::put('/quote-requests/{quoteRequest}', [QuoteRequestAdminController::class, 'update']);
+        Route::post('/quote-requests/{quoteRequest}/approve', [QuoteRequestAdminController::class, 'approve']);
     });
 });
 

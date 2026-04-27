@@ -20,6 +20,7 @@ class ConsultationRequestFactory extends Factory
             'email' => $this->faker->safeEmail(),
             'phone' => $this->faker->optional()->phoneNumber(),
             'country' => $this->faker->optional()->country(),
+            'country_code' => $this->faker->optional()->randomElement(['US', 'CA', 'GB', 'RW']),
             'service_category' => $this->faker->optional()->randomElement([
                 '1',
                 '2',

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreConsultationRequest extends FormRequest
+class StoreQuoteRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -23,8 +23,6 @@ class StoreConsultationRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:50'],
             'country' => ['nullable', 'string', 'max:100'],
             'country_code' => ['nullable', 'string', 'size:2'],
-            'preferred_date' => ['nullable', 'date'],
-            'consultation_type' => ['nullable', 'string', 'in:Virtual Meeting,Phone Call,In-Person Meeting'],
             'service_category' => ['required', 'string', 'regex:/^\\d{1,2}$/'],
             'service_name' => ['nullable', 'string', 'max:255'],
             'project_summary' => ['required', 'string', 'max:10000'],

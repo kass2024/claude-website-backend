@@ -9,16 +9,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('consultation_requests', function (Blueprint $table) {
-            $table->string('country_code', 2)->nullable()->after('country');
-            $table->string('service_name')->nullable()->after('service_category');
+            if (!Schema::hasColumn('consultation_requests', 'country_code')) {
+                $table->string('country_code', 2)->nullable()->after('country');
+            }
         });
     }
 
     public function down(): void
     {
         Schema::table('consultation_requests', function (Blueprint $table) {
-            $table->dropColumn('service_name');
-            $table->dropColumn('country_code');
+            if (Schema::hasColumn('consultation_requests', 'country_code')) {
+                $table->dropColumn('country_code');
+            }
         });
     }
 };

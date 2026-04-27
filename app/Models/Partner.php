@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Partner extends Model
 {
+    use SoftDeletes;
+
     /**
      * @var array<int, string>
      */
@@ -25,6 +28,7 @@ class Partner extends Model
      */
     protected $casts = [
         'is_published' => 'boolean',
+        'deleted_at' => 'datetime',
     ];
 }
 

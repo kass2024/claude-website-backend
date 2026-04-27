@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use Database\Factories\ConsultationRequestFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ConsultationRequest extends Model
+class QuoteRequest extends Model
 {
-    /** @use HasFactory<ConsultationRequestFactory> */
     use HasFactory;
 
     /**
@@ -23,16 +21,26 @@ class ConsultationRequest extends Model
         'country_code',
         'service_category',
         'service_name',
-        'consultation_type',
-        'preferred_date',
         'project_summary',
+        'status',
+        'currency',
+        'line_items',
+        'notes',
+        'subtotal',
+        'tax',
+        'total',
+        'approved_at',
     ];
 
     /**
      * @var array<string, string>
      */
     protected $casts = [
-        'preferred_date' => 'date',
+        'line_items' => 'array',
+        'approved_at' => 'datetime',
+        'subtotal' => 'decimal:2',
+        'tax' => 'decimal:2',
+        'total' => 'decimal:2',
     ];
 }
 
