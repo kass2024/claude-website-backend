@@ -26,28 +26,32 @@ use App\Http\Controllers\Public\SettingController;
 use App\Http\Controllers\Public\TestimonialController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/services', [ServiceController::class, 'index']);
-Route::get('/services/{service:slug}', [ServiceController::class, 'show']);
+// Public API is consumed by a static-exported frontend on shared hosting (cPanel).
+// Prevent any intermediary cache (browser/CDN/proxy) from serving stale JSON after admin edits.
+Route::middleware('no-cache')->group(function () {
+    Route::get('/services', [ServiceController::class, 'index']);
+    Route::get('/services/{service:slug}', [ServiceController::class, 'show']);
 
-Route::get('/projects', [ProjectController::class, 'index']);
-Route::get('/projects/{project:slug}', [ProjectController::class, 'show']);
+    Route::get('/projects', [ProjectController::class, 'index']);
+    Route::get('/projects/{project:slug}', [ProjectController::class, 'show']);
 
-Route::get('/categories', [CategoryController::class, 'index']);
+    Route::get('/categories', [CategoryController::class, 'index']);
 
-Route::get('/posts', [BlogPostController::class, 'index']);
-Route::get('/posts/{post:slug}', [BlogPostController::class, 'show']);
+    Route::get('/posts', [BlogPostController::class, 'index']);
+    Route::get('/posts/{post:slug}', [BlogPostController::class, 'show']);
+
+    Route::get('/testimonials', [TestimonialController::class, 'index']);
+    Route::get('/faqs', [FaqController::class, 'index']);
+    Route::get('/settings', [SettingController::class, 'index']);
+    Route::get('/board-members', [BoardMemberController::class, 'index']);
+    Route::get('/partners', [PartnerController::class, 'index']);
+    Route::get('/files/{path}', [FileController::class, 'show'])->where('path', '.*');
+});
 
 Route::post('/contact', [ContactMessageController::class, 'store']);
 Route::post('/consultation', [ConsultationRequestController::class, 'store']);
 Route::post('/quote', [QuoteRequestController::class, 'store']);
 // POST /career-application will be added with file upload when career module is implemented.
-
-Route::get('/testimonials', [TestimonialController::class, 'index']);
-Route::get('/faqs', [FaqController::class, 'index']);
-Route::get('/settings', [SettingController::class, 'index']);
-Route::get('/board-members', [BoardMemberController::class, 'index']);
-Route::get('/partners', [PartnerController::class, 'index']);
-Route::get('/files/{path}', [FileController::class, 'show'])->where('path', '.*');
 
 Route::prefix('/admin')->middleware('no-cache')->group(function () {
     Route::post('/login', [AdminAuthController::class, 'login']);
