@@ -5,6 +5,10 @@ use App\Http\Controllers\Admin\ConsultationRequestAdminController;
 use App\Http\Controllers\Admin\ContactMessageAdminController;
 use App\Http\Controllers\Admin\QuoteRequestAdminController;
 use App\Http\Controllers\Admin\BoardMemberAdminController;
+use App\Http\Controllers\Admin\BannerAdminController;
+use App\Http\Controllers\Admin\EventAdminController as EventAdminController;
+use App\Http\Controllers\Admin\InterestLeadAdminController;
+use App\Http\Controllers\Admin\OfferAdminController;
 use App\Http\Controllers\Admin\PartnerAdminController;
 use App\Http\Controllers\Admin\PostAdminController;
 use App\Http\Controllers\Admin\ProjectAdminController;
@@ -13,13 +17,17 @@ use App\Http\Controllers\Admin\SettingAdminController;
 use App\Http\Controllers\Admin\UploadController;
 use App\Http\Controllers\Public\BoardMemberController;
 use App\Http\Controllers\Public\BlogPostController;
+use App\Http\Controllers\Public\BannerController;
 use App\Http\Controllers\Public\CategoryController;
 use App\Http\Controllers\Public\ConsultationRequestController;
 use App\Http\Controllers\Public\ContactMessageController;
+use App\Http\Controllers\Public\EventController;
 use App\Http\Controllers\Public\QuoteRequestController;
 use App\Http\Controllers\Public\FaqController;
 use App\Http\Controllers\Public\FxRateController;
 use App\Http\Controllers\Public\FileController;
+use App\Http\Controllers\Public\InterestLeadController;
+use App\Http\Controllers\Public\OfferController;
 use App\Http\Controllers\Public\PartnerController;
 use App\Http\Controllers\Public\ProjectController;
 use App\Http\Controllers\Public\ServiceController;
@@ -41,6 +49,14 @@ Route::middleware('no-cache')->group(function () {
     Route::get('/posts', [BlogPostController::class, 'index']);
     Route::get('/posts/{post:slug}', [BlogPostController::class, 'show']);
 
+    Route::get('/offers', [OfferController::class, 'index']);
+    Route::get('/offers/{offer:slug}', [OfferController::class, 'show']);
+
+    Route::get('/events', [EventController::class, 'index']);
+    Route::get('/events/{event:slug}', [EventController::class, 'show']);
+
+    Route::get('/banners', [BannerController::class, 'index']);
+
     Route::get('/testimonials', [TestimonialController::class, 'index']);
     Route::get('/faqs', [FaqController::class, 'index']);
     Route::get('/settings', [SettingController::class, 'index']);
@@ -53,6 +69,7 @@ Route::middleware('no-cache')->group(function () {
 Route::post('/contact', [ContactMessageController::class, 'store']);
 Route::post('/consultation', [ConsultationRequestController::class, 'store']);
 Route::post('/quote', [QuoteRequestController::class, 'store']);
+Route::post('/interest-leads', [InterestLeadController::class, 'store']);
 // POST /career-application will be added with file upload when career module is implemented.
 
 Route::prefix('/admin')->middleware('no-cache')->group(function () {
@@ -67,6 +84,9 @@ Route::prefix('/admin')->middleware('no-cache')->group(function () {
         Route::apiResource('services', ServiceAdminController::class);
         Route::apiResource('projects', ProjectAdminController::class);
         Route::apiResource('posts', PostAdminController::class);
+        Route::apiResource('offers', OfferAdminController::class);
+        Route::apiResource('events', EventAdminController::class);
+        Route::apiResource('banners', BannerAdminController::class);
         Route::apiResource('board-members', BoardMemberAdminController::class);
         
         // Additional routes for soft delete management
@@ -87,6 +107,11 @@ Route::prefix('/admin')->middleware('no-cache')->group(function () {
         Route::get('/quote-requests/{quoteRequest}', [QuoteRequestAdminController::class, 'show']);
         Route::put('/quote-requests/{quoteRequest}', [QuoteRequestAdminController::class, 'update']);
         Route::post('/quote-requests/{quoteRequest}/approve', [QuoteRequestAdminController::class, 'approve']);
+
+        Route::get('/interest-leads', [InterestLeadAdminController::class, 'index']);
+        Route::get('/interest-leads/export', [InterestLeadAdminController::class, 'export']);
+        Route::get('/interest-leads/{interestLead}', [InterestLeadAdminController::class, 'show']);
+        Route::patch('/interest-leads/{interestLead}', [InterestLeadAdminController::class, 'update']);
     });
 });
 
